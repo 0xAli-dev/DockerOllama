@@ -45,5 +45,3 @@ cleanup() {
 }
 trap cleanup SIGTERM SIGINT
 
-# ── الانتظار حتى تنتهي عملية Ollama الرئيسية ──
-wait $OLLAMA_PID
