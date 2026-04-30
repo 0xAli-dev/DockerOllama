@@ -5,16 +5,7 @@ FROM ollama/ollama:latest
 RUN apt-get update && apt-get install -y --no-install-recommends curl procps \
     && rm -rf /var/lib/apt/lists/*
 
-# ── سحب النموذج أثناء البناء ──
-# نستخدم bash + pkill بدلاً من kill %1
-RUN bash -c '\
-    ollama serve & \
-    sleep 20 && \
-    ollama pull smollm:135m && \
-    pkill -f "ollama serve" || true'
-    
 
-# نسخ سكريبت التشغيل
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
