@@ -18,7 +18,6 @@ sleep 5
 
 # تأكيد وجود النماذج (احتياط)
 ollama pull smollm:135m
-ollama pull qwen2.5:0.5b
 
 # إبقاء الحاوية شغالة
 wait
