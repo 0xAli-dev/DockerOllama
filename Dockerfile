@@ -1,20 +1,25 @@
-FROM alpine/ollama:latest
+# ── الصورة الرسمية (Debian-based) ──
+FROM ollama/ollama:latest
 
-# تثبيت curl لفحص الصحة
-RUN apk add --no-cache curl
+# تثبيت curl و procps (لأمر pkill)
+RUN apt-get update && apt-get install -y --no-install-recommends curl procps \
+    && rm -rf /var/lib/apt/lists/*
 
 # ── سحب النموذج أثناء البناء ──
-RUN sh -c '\
+# نستخدم bash + pkill بدلاً من kill %1
+RUN bash -c '\
     ollama serve & \
-    sleep 10 && \
+    sleep 20 && \
     ollama pull smollm:135m && \
-    kill %1 || true'
+    pkill -f "ollama serve" || true'
 
+# نسخ سكريبت التشغيل
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 11434
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=5 \
   CMD curl -fsS http://localhost:${PORT:-11434}/api/tags > /dev/null || exit 1
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
