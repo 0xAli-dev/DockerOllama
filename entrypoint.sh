@@ -9,25 +9,16 @@ export OLLAMA_CTX_SIZE=256
 echo "🚀 Starting Ollama on 0.0.0.0:${PORT}"
 
 # ── تشغيل Ollama في الخلفية ──
+
+# تشغيل Ollama في الخلفية
 ollama serve &
-OLLAMA_PID=$!
 
+# انتظار السيرفر يشتغل
+sleep 5
 
+# تأكيد وجود النماذج (احتياط)
+ollama pull smollm:135m
+ollama pull qwen2.5:0.5b
 
-sleep 30
-
-# ── عرض السجلات مباشرة في stdout (سجلات Render) ──
-# Ollama يكتب سجلاته إلى هذا المسار، نستخدم tail -f لإرسالها مباشرة إلى stdout
-if [ -f /root/.ollama/logs/server.log ]; then
-    tail -n 0 -f /root/.ollama/logs/server.log &
-    TAIL_PID=$!
-else
-    # إذا لم يُنشئ الملف بعد، ننتظر ثانية ونحاول مجدداً
-    sleep 2
-    if [ -f /root/.ollama/logs/server.log ]; then
-        tail -n 0 -f /root/.ollama/logs/server.log &
-        TAIL_PID=$!
-    fi
-fi
-
-
+# إبقاء الحاوية شغالة
+wait
