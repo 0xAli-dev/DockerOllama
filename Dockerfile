@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl procps \
 RUN bash -c '\
     ollama serve & \
     sleep 20 && \
-    ollama pull smollm:135m && \
+    ollama pull smollm:135m qwen2.5:0.5b && \
     pkill -f "ollama serve" || true'
 
 # نسخ سكريبت التشغيل
