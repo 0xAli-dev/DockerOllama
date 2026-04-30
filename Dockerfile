@@ -1,29 +1,13 @@
-FROM ubuntu:22.04
+FROM langchain4j/ollama-tinyllama:latest
 
-
-RUN apt-get update && apt-get install -y \
-    curl \
-    ca-certificates \
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
-
-RUN curl -fsSL https://ollama.com/install.sh | sh
-
-
-ENV OLLAMA_HOST=0.0.0.0:11434
-ENV OLLAMA_MODELS=/root/.ollama/models
-ENV PATH="/usr/local/bin:${PATH}"
-
-
-RUN bash -c "\
-    ollama serve & \
-    sleep 8 && \
-    ollama pull tinyllama:1.1b && \
-    pkill -f 'ollama serve' || true"
-
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 11434
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
+  CMD curl -fsS http://localhost:${PORT:-11434}/api/tags > /dev/null || exit 1
 
-
-ENTRYPOINT ["ollama"]
-CMD ["serve"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
