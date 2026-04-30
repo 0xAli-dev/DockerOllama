@@ -1,7 +1,14 @@
-FROM langchain4j/ollama-smollm:latest 
+FROM alpine/ollama:latest
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl \
-    && rm -rf /var/lib/apt/lists/*
+# تثبيت curl لفحص الصحة
+RUN apk add --no-cache curl
+
+# ── سحب النموذج أثناء البناء ──
+RUN sh -c '\
+    ollama serve & \
+    sleep 10 && \
+    ollama pull smollm:135m && \
+    kill %1 || true'
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
