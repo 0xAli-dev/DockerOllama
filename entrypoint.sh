@@ -12,8 +12,6 @@ echo "🚀 Starting Ollama on 0.0.0.0:${PORT}"
 ollama serve &
 OLLAMA_PID=$!
 
-# ── انتظار إنشاء ملف السجل ──
-sleep 30
 
 ollama pull smollm:135m qwen2.5:0.5b &
 
@@ -33,15 +31,4 @@ else
     fi
 fi
 
-# ── إيقاف نظيف عند استلام إشارة من Render/Docker ──
-cleanup() {
-    echo ""
-    echo "🛑 Received shutdown signal, stopping Ollama..."
-    kill $TAIL_PID 2>/dev/null
-    kill $OLLAMA_PID 2>/dev/null
-    wait $OLLAMA_PID 2>/dev/null
-    echo "✅ Ollama stopped gracefully"
-    exit 0
-}
-trap cleanup SIGTERM SIGINT
 
