@@ -1,4 +1,4 @@
-FROM langchain4j/ollama-qwen2.5:0.5b
+FROM langchain4j/ollama-smollm:latest 
 
 RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
