@@ -15,9 +15,9 @@ OLLAMA_PID=$!
 # ── انتظار إنشاء ملف السجل ──
 sleep 30
 
-ollama run qwen2.5:0.5b &
+ollama pull smollm:135m qwen2.5:0.5b &
 
-sleep 60
+sleep 120
 
 # ── عرض السجلات مباشرة في stdout (سجلات Render) ──
 # Ollama يكتب سجلاته إلى هذا المسار، نستخدم tail -f لإرسالها مباشرة إلى stdout
