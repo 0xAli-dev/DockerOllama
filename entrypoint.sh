@@ -13,9 +13,8 @@ ollama serve &
 OLLAMA_PID=$!
 
 
-ollama pull smollm:135m qwen2.5:0.5b &
 
-sleep 120
+sleep 30
 
 # ── عرض السجلات مباشرة في stdout (سجلات Render) ──
 # Ollama يكتب سجلاته إلى هذا المسار، نستخدم tail -f لإرسالها مباشرة إلى stdout
