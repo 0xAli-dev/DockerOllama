@@ -12,7 +12,6 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 # تحميل النماذج مسبقاً أثناء build
 RUN ollama serve & sleep 5 && \
     ollama pull smollm:135m && \
-    ollama pull qwen2.5:0.5b && \
     pkill ollama
 
 EXPOSE 11434
